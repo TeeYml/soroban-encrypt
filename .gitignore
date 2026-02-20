@@ -1,0 +1,23 @@
+# Compiled binaries
+*-bin
+client-bin
+node-bin
+
+# Go artifacts
+*.test
+*.prof
+*.exe
+
+# Rust artifacts
+/target/
+/contract/target/
+
+# OS specific files
+.DS_Store
+
+# Local test outputs
+*.enc
+*.json
+plaintext.txt
+decrypted_allowed.txt
+decrypted_denied.txt
