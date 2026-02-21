@@ -30,7 +30,7 @@ fn test_allowlist_flow() {
     assert!(!client.is_allowed(&user_b));
 
     // approve should succeed for user_a (no panic)
-    client.approve(&Bytes::from_slice(&env, b"object_123"), &user_a);
+    client.seal_approve(&Bytes::from_slice(&env, b"object_123"), &user_a);
 
     // Admin removes user_a
     client.remove(&user_a);
@@ -54,5 +54,5 @@ fn test_approve_denied() {
     let user = Address::generate(&env);
 
     // user is not added, so approve should panic
-    client.approve(&Bytes::from_slice(&env, b"object_123"), &user);
+    client.seal_approve(&Bytes::from_slice(&env, b"object_123"), &user);
 }

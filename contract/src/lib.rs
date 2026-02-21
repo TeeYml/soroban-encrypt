@@ -38,3 +38,9 @@ impl AllowlistContract {
         env.storage().persistent().has(&DataKey::AllowedUser(account))
     }
 }
+
+    pub fn seal_approve(env: Env, _id: Bytes, caller: Address) {
+        if !Self::is_allowed(env.clone(), caller) {
+            panic!("ENoAccess");
+        }
+    }
