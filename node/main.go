@@ -201,7 +201,7 @@ func handleRetrieveShare(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sigValid, err := true, nil // VerifyStellarSignature(req.CallerAddress, msgBytes, sigBytes)
+	sigValid, err := VerifyStellarSignature(req.CallerAddress, msgBytes, sigBytes)
 	if err != nil || !sigValid {
 		http.Error(w, "Invalid Stellar signature", http.StatusUnauthorized)
 		return
