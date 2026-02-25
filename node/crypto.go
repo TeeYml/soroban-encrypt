@@ -13,7 +13,7 @@ import (
 
 // GenerateNodeKey makes a static P-256 key pair used for decrypting incoming SSS shares.
 func GenerateNodeKey() (*ecdh.PrivateKey, error) {
-	priv, err := ecdh.P256().GenerateKey(nil)
+	priv, err := ecdh.P256().GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate P-256 key: %w", err)
 	}
@@ -57,7 +57,7 @@ func DecryptShare(nodePriv *ecdh.PrivateKey, ephemeralPubKeyBytes []byte, cipher
 // EncryptShareForTesting is just for testing. Encrypts a share under the node's public key.
 func EncryptShareForTesting(nodePub *ecdh.PublicKey, plaintext []byte, nonce []byte) ([]byte, []byte, error) {
 	// Generate ephemeral key pair
-	ephemeralPriv, err := ecdh.P256().GenerateKey(nil)
+	ephemeralPriv, err := ecdh.P256().GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to generate ephemeral key: %w", err)
 	}
