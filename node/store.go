@@ -103,3 +103,12 @@ func closeDB() {
 		}
 	}
 }
+
+// closeDB cleanly closes the BoltDB handle — call on shutdown.
+func closeDB() {
+	if db != nil {
+		if err := db.Close(); err != nil {
+			fmt.Printf("warning: failed to close BoltDB: %v\n", err)
+		}
+	}
+}
