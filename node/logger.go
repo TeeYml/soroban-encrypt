@@ -64,3 +64,8 @@ func rotateDailyLogFile() {
 	// Daily rotation is handled by openAuditFile() which uses the current date.
 	// This function is a no-op hook for future size-based rotation.
 }
+
+// logStartup emits the node startup banner with key config fields.
+func logStartup(cfg *Config) {
+  logger.Info().Str("port", cfg.Port).Str("tls", cfg.TLSMode).Str("data_dir", cfg.DataDir).Msg("node_startup")
+}
