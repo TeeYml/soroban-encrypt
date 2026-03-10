@@ -53,3 +53,8 @@ func maskBytes(b []byte) string {
 	}
 	return "****[truncated]"
 }
+
+// logStartup emits the node startup banner with key config fields.
+func logStartup(cfg *Config) {
+  logger.Info().Str("port", cfg.Port).Str("tls", cfg.TLSMode).Str("data_dir", cfg.DataDir).Msg("node_startup")
+}
