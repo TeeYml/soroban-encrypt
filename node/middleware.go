@@ -128,3 +128,11 @@ func unauthorizedResponse(w http.ResponseWriter, reason string) {
 	w.WriteHeader(http.StatusUnauthorized)
 	fmt.Fprintf(w, "{\"error\":\"unauthorized\",\"reason\":%q}\n", reason)
 }
+
+// maskSensitiveField returns a redacted version of a header value for logging.
+func maskSensitiveField(v string) string {
+	if len(v) < 8 {
+		return "****"
+	}
+	return v[:4] + "****"
+}
