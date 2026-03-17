@@ -91,3 +91,10 @@ func rateLimitByObjectMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+// getOrCreateObjectLimiter returns an existing or new per-object rate limiter.
+func getOrCreateObjectLimiter(objectID string) *rate.Limiter {
+	key := "obj:" + objectID
+	lim, _ := objectLimiters.LoadOrStore(key, rate.NewLimiter(rate.Every(time.Second), 5))
+	return lim.(*rate.Limiter)
+}
