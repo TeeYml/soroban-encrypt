@@ -98,3 +98,10 @@ func getOrCreateObjectLimiter(objectID string) *rate.Limiter {
 	lim, _ := objectLimiters.LoadOrStore(key, rate.NewLimiter(rate.Every(time.Second), 5))
 	return lim.(*rate.Limiter)
 }
+
+// writeRateLimitExceeded writes a 429 response with Retry-After header.
+func writeRateLimitExceeded(w http.ResponseWriter) {
+	w.Header().Set("Retry-After", "1")
+	w.Header().Set("X-RateLimit-Policy", "token-bucket")
+	http.Error(w, "Too Many Requests — please slow down", http.StatusTooManyRequests)
+}
