@@ -105,3 +105,8 @@ func (c *Config) ReadTimeout() time.Duration { return time.Duration(c.TimeoutSec
 
 // WriteTimeout returns the HTTP server write timeout duration.
 func (c *Config) WriteTimeout() time.Duration { return time.Duration(c.TimeoutSecs) * time.Second }
+
+// RateLimiterConfig extracts rate limiting configuration fields.
+func (c *Config) RateLimiterConfig() (limit float64, burst int) {
+	return c.RateLimit, c.RateBurst
+}
