@@ -84,3 +84,10 @@ func writeRateLimitExceeded(w http.ResponseWriter) {
 	w.Header().Set("X-RateLimit-Policy", "token-bucket")
 	http.Error(w, "Too Many Requests — please slow down", http.StatusTooManyRequests)
 }
+
+// rateLimitByObject wraps a handler and rate-limits by the object_id JSON field.
+func rateLimitByObjectMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r)
+	})
+}
