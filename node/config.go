@@ -110,3 +110,6 @@ func (c *Config) WriteTimeout() time.Duration { return time.Duration(c.TimeoutSe
 func (c *Config) RateLimiterConfig() (limit float64, burst int) {
 	return c.RateLimit, c.RateBurst
 }
+
+// StoreAuthRequired returns true if STORE_API_KEY is set.
+func (c *Config) StoreAuthRequired() bool { return c.StoreAPIKey != "" }
