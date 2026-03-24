@@ -1,0 +1,26 @@
+package main
+
+import (
+	"crypto/tls"
+	"fmt"
+)
+
+// buildTLSConfig creates a tls.Config enforcing TLS 1.3 minimum and HSTS.
+func buildTLSConfig(cfg *Config) (*tls.Config, error) {
+	cert, err := tls.LoadX509KeyPair(cfg.TLSCert, cfg.TLSKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load TLS keypair: %w", err)
+	}
+	return &tls.Config{
+		MinVersion:   tls.VersionTLS13,
+		Certificates: []tls.Certificate{cert},
+	}, nil
+}
+
+// hstsMiddleware injects Strict-Transport-Security header on all HTTPS responses.
+func hstsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+		next.ServeHTTP(w, r)
+	})
+}
