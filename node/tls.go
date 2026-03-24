@@ -24,3 +24,15 @@ func hstsMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+// tlsModeDescription returns a human-readable description of the TLS mode.
+func tlsModeDescription(mode string) string {
+	switch mode {
+	case "auto":
+		return "Let's Encrypt automatic certificate"
+	case "manual":
+		return "manual certificate from file"
+	default:
+		return "plaintext HTTP (no TLS)"
+	}
+}
