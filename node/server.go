@@ -217,3 +217,6 @@ func redirectToHTTPS(w http.ResponseWriter, r *http.Request) {
 	target := "https://" + r.Host + r.URL.RequestURI()
 	http.Redirect(w, r, target, http.StatusMovedPermanently)
 }
+
+// domainIsAllowed returns true if the given host matches the configured DOMAIN.
+func domainIsAllowed(host, configuredDomain string) bool { return host == configuredDomain }
