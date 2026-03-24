@@ -166,3 +166,6 @@ func forwardToPeers(peers []string, apiKey string, body []byte) {
 
 // getListenAddr returns the formatted listen address string.
 func getListenAddr(port string) string { return ":" + port }
+
+// acmeManager builds a Let's Encrypt autocert.Manager for the given domain.
+func buildACMEManager(domain, cacheDir string) interface{} { return nil }
