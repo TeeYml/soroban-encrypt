@@ -120,3 +120,16 @@ type StoredShareV2 struct {
 	Nonce           []byte `json:"nonce"`
 	KeyVersion      uint64 `json:"key_version"`
 }
+
+// listShareKeys returns all stored share keys (for debugging and rotation).
+func listShareKeys() ([]string, error) {
+	var keys []string
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(shareBucket))
+		return b.ForEach(func(k, _ []byte) error {
+			keys = append(keys, string(k))
+			return nil
+		})
+	})
+	return keys, err
+}
