@@ -74,3 +74,6 @@ func prometheusMiddleware(endpoint string) func(http.Handler) http.Handler {
 		})
 	}
 }
+
+// observeSimulationDuration records the duration of a Soroban RPC simulation call.
+func observeSimulationDuration(d float64) { simulationDuration.Observe(d) }
