@@ -98,3 +98,14 @@ func recordAccessDecision(granted bool) {
 		accessDenied.Inc()
 	}
 }
+
+// requireMetricsKey is a middleware that enforces the METRICS_API_KEY.
+func requireMetricsKey(key string, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if key != "" && !secureStringEqual(r.Header.Get("X-Api-Key"), key) {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
