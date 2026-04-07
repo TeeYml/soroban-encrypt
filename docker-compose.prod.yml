@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  node:
+    image: ghcr.io/teeyml/soroban-encrypt-node:${TAG:-latest}
+    restart: unless-stopped
+    ports: ["443:443", "80:80"]
+    env_file: .env
+    volumes:
+      - node_data:/data
+      - ./certs:/certs:ro
+    environment:
+      DATA_DIR: /data
+      TLS_MODE: manual
+      TLS_CERT: /certs/cert.pem
+      TLS_KEY: /certs/key.pem
+
+volumes:
+  node_data:
