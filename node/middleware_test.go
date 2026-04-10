@@ -79,4 +79,12 @@ func TestLoggingMiddleware(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
+
+	// Test nil body
+	reqNil := httptest.NewRequest(http.MethodGet, "/public-key", nil)
+	rrNil := httptest.NewRecorder()
+	h.ServeHTTP(rrNil, reqNil)
+	if rrNil.Code != http.StatusOK {
+		t.Errorf("expected 200 for nil body, got %d", rrNil.Code)
+	}
 }

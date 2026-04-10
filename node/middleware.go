@@ -15,9 +15,12 @@ func loggingMiddleware(next http.Handler) http.Handler {
 		start := time.Now()
 		rw := &statusWriter{ResponseWriter: w, code: http.StatusOK}
 		
-		bodyBytes, _ := io.ReadAll(r.Body)
-		bodySize := int64(len(bodyBytes))
-		r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+		var bodySize int64
+		if r.Body != nil {
+			bodyBytes, _ := io.ReadAll(r.Body)
+			bodySize = int64(len(bodyBytes))
+			r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+		}
 
 		next.ServeHTTP(rw, r)
 		logger.Info().
