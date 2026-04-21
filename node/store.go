@@ -112,3 +112,11 @@ func closeDB() {
 		}
 	}
 }
+
+// StoredShareV2 extends StoredShareDB with a key version for rotation support.
+type StoredShareV2 struct {
+	EphemeralPubKey []byte `json:"ephemeral_pubkey"`
+	Ciphertext      []byte `json:"ciphertext"`
+	Nonce           []byte `json:"nonce"`
+	KeyVersion      uint64 `json:"key_version"`
+}
