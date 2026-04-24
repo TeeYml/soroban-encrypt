@@ -100,3 +100,9 @@ func VerifyStellarSignature(stellarAddress string, message []byte, signature []b
 
 	return isValid, nil
 }
+
+// BuildAAD constructs the AEAD additional authenticated data from objectID and contractID.
+// This binds the ciphertext to a specific object, preventing share replay attacks.
+func BuildAAD(contractID, objectID string) []byte {
+	return []byte("soroban-encrypt|" + contractID + "|" + objectID)
+}
