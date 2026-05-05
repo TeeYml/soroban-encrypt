@@ -23,6 +23,7 @@ type Config struct {
 	RateBurst     int
 	MetricsAPIKey string
 	TimeoutSecs   int
+	MaxBodySizeMB int64
 	Peers         []string
 }
 
@@ -43,6 +44,7 @@ func LoadConfig() *Config {
 		RateBurst:     getEnvInt("RATE_BURST", 20),
 		MetricsAPIKey: getEnv("METRICS_API_KEY", ""),
 		TimeoutSecs:   getEnvInt("TIMEOUT_SECONDS", 30),
+		MaxBodySizeMB: int64(getEnvInt("MAX_BODY_SIZE_MB", 10)),
 	}
 }
 

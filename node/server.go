@@ -37,7 +37,7 @@ func buildMux(cfg *Config) http.Handler {
 	mux.Handle("/rotate-key", apiKeyMiddleware(cfg.StoreAPIKey)(storeMux))
 	mux.Handle("/sync", apiKeyMiddleware(cfg.StoreAPIKey)(storeMux))
 
-	chain := loggingMiddleware(bodySizeLimitMiddleware(1<<20)(rateLimitMiddleware(mux)))
+	chain := loggingMiddleware(bodySizeLimitMiddleware(cfg.MaxBodySizeMB)(rateLimitMiddleware(mux)))
 	return chain
 }
 

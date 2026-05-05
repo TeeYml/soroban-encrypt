@@ -31,3 +31,12 @@ func TestConfigValidation(t *testing.T) {
 		})
 	}
 }
+
+func TestConfigMaxBodySize(t *testing.T) {
+	os.Setenv("MAX_BODY_SIZE_MB", "25")
+	defer os.Unsetenv("MAX_BODY_SIZE_MB")
+	cfg := LoadConfig()
+	if cfg.MaxBodySizeMB != 25 {
+		t.Errorf("expected MaxBodySizeMB to be 25, got %d", cfg.MaxBodySizeMB)
+	}
+}
