@@ -138,3 +138,28 @@ func listenWithGracefulShutdown(srv *http.Server) error {
 	logger.Info().Msg("node_stopped")
 	return nil
 }
+
+// forwardToPeers replicates an incoming share to all configured peer nodes.
+func forwardToPeers(peers []string, apiKey string, body []byte) {
+	for _, peer := range peers {
+		go func(p string) {
+			req, err := http.NewRequest(http.MethodPost, p+"/store", bytes.NewReader(body))
+			if err != nil {
+				logger.Error().Err(err).Str("peer", p).Msg("peer_replication_request_failed")
+				return
+			}
+			req.Header.Set("Content-Type", "application/json")
+			req.Header.Set("X-Forwarded-By", "self")
+			if apiKey != "" {
+				req.Header.Set("X-Api-Key", apiKey)
+			}
+			resp, err := http.DefaultClient.Do(req)
+			if err != nil {
+				logger.Error().Err(err).Str("peer", p).Msg("peer_replication_failed")
+				return
+			}
+			resp.Body.Close()
+			logger.Info().Str("peer", p).Int("status", resp.StatusCode).Msg("peer_replication_sent")
+		}(peer)
+	}
+}
