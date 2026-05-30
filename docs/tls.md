@@ -34,3 +34,11 @@ tls_key:  /etc/node/key.pem
 - TLS 1.3 minimum enforced
 - HSTS header: `max-age=63072000; includeSubDomains`
 - HTTP traffic automatically redirected to HTTPS when TLS is active
+
+## Admin Dashboard
+
+The embedded admin dashboard is served at `/admin/` when `ADMIN_DASHBOARD=true`.
+
+> ⚠️ The dashboard is disabled when `TLS_MODE=off` to prevent credentials being sent over plain HTTP.
+
+Set `ADMIN_PASSWORD` to protect the dashboard with HTTP Basic Auth.
