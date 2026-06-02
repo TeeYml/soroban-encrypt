@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/stellar/go-stellar-sdk/strkey"
 	"github.com/stellar/go-stellar-sdk/xdr"
@@ -92,7 +93,7 @@ func init() {
 }
 
 func main() {
-	fmt.Printf("Soroban-Encrypt Go Node public key: %s\n", hex.EncodeToString(nodePublicKey.Bytes()))
+	fmt.Printf("Soroban-Encrypt Go Node public key: %s (started at %s)\n", hex.EncodeToString(nodePublicKey.Bytes()), nodeStartTime.Format(time.RFC3339))
 
 	http.HandleFunc("/public-key", handleGetPublicKey)
 	http.HandleFunc("/store", handleStoreShare)

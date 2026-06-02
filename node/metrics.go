@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -10,6 +11,11 @@ import (
 )
 
 var (
+	serverUptime = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "soroban_encrypt_server_uptime_seconds",
+		Help: "Uptime of the server in seconds.",
+	})
+
 	requestsTotal = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "soroban_encrypt_requests_total",
 		Help: "Total HTTP requests by endpoint and status code.",
@@ -51,11 +57,9 @@ var (
 // metricsHandler returns the Prometheus /metrics endpoint, optionally protected by API key.
 func metricsHandler(apiKey string) http.Handler {
 	h := promhttp.Handler()
-	if apiKey == "" {
-		return h
-	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !secureStringEqual(r.Header.Get("X-Api-Key"), apiKey) {
+		serverUptime.Set(time.Since(nodeStartTime).Seconds())
+		if apiKey != "" && !secureStringEqual(r.Header.Get("X-Api-Key"), apiKey) {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
