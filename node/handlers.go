@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"time"
 )
@@ -13,8 +14,15 @@ var nodeStartTime = time.Now()
 // GET /health — liveness probe
 func handleHealth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	
+	dnsStatus := "ok"
+	if _, err := net.LookupHost("soroban-testnet.stellar.org"); err != nil {
+		dnsStatus = "failed: " + err.Error()
+	}
+
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"status":  "ok",
+		"dns":     dnsStatus,
 		"uptime":  time.Since(nodeStartTime).String(),
 		"started": nodeStartTime.Format(time.RFC3339),
 	})

@@ -41,6 +41,9 @@ func TestHandleHealth(t *testing.T) {
 	if body["status"] != "ok" {
 		t.Errorf("expected status=ok, got %v", body["status"])
 	}
+	if body["dns"] == nil || body["dns"] == "" {
+		t.Errorf("expected dns field in health response, got nil/empty")
+	}
 }
 
 func TestHandleReady_NoDB(t *testing.T) {
