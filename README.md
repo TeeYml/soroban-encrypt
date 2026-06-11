@@ -103,6 +103,8 @@ impl AllowlistContract {
 | `DATA_DIR` | `./data` | Directory for BoltDB share store and node key PEM |
 | `PORT` | `8080` | HTTP listen port |
 | `SOROBAN_RPC_URL` | testnet | Soroban JSON-RPC endpoint |
+| `MAX_BODY_SIZE_MB` | `10` | Maximum allowed request body size in MB |
+| `HEALTH_CHECK_PATH` | `/health` | Custom path for the liveness healthcheck |
 
 ### Encrypting with Node API Key
 
