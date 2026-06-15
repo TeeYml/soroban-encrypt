@@ -15,7 +15,7 @@ var auditLogger zerolog.Logger
 func InitLogger(level string) {
 	lvl, err := zerolog.ParseLevel(level)
 	if err != nil {
-		panic("failed to parse log level: " + err.Error())
+		lvl = zerolog.InfoLevel
 	}
 	zerolog.SetGlobalLevel(lvl)
 	logger = zerolog.New(os.Stdout).With().Timestamp().Str("service", "soroban-encrypt-node").Logger()
