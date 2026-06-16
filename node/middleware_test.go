@@ -83,6 +83,9 @@ func TestLoggingMiddleware(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Errorf("expected 200, got %d", rr.Code)
 	}
+	if rr.Header().Get("X-Request-ID") == "" {
+		t.Errorf("expected X-Request-ID header to be set, was empty")
+	}
 
 	// Test nil body
 	reqNil := httptest.NewRequest(http.MethodGet, "/public-key", nil)
@@ -90,5 +93,8 @@ func TestLoggingMiddleware(t *testing.T) {
 	h.ServeHTTP(rrNil, reqNil)
 	if rrNil.Code != http.StatusOK {
 		t.Errorf("expected 200 for nil body, got %d", rrNil.Code)
+	}
+	if rrNil.Header().Get("X-Request-ID") == "" {
+		t.Errorf("expected X-Request-ID header to be set for nil body")
 	}
 }

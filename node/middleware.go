@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,6 +17,12 @@ func loggingMiddleware(next http.Handler) http.Handler {
 		start := time.Now()
 		rw := &statusWriter{ResponseWriter: w, code: http.StatusOK}
 		
+		reqID := r.Header.Get("X-Request-ID")
+		if reqID == "" {
+			reqID = generateRequestID()
+		}
+		w.Header().Set("X-Request-ID", reqID)
+
 		var bodySize int64
 		if r.Body != nil {
 			bodyBytes, _ := io.ReadAll(r.Body)
@@ -29,9 +37,16 @@ func loggingMiddleware(next http.Handler) http.Handler {
 			Str("remote_addr", r.RemoteAddr).
 			Int("status", rw.code).
 			Int64("body_size", bodySize).
+			Str("req_id", reqID).
 			Int64("duration_us", time.Since(start).Microseconds()).
 			Msg("http_request")
 	})
+}
+
+func generateRequestID() string {
+	b := make([]byte, 8)
+	rand.Read(b)
+	return hex.EncodeToString(b)
 }
 
 // bodySizeLimitMiddleware caps request body at maxBytes to prevent OOM.
