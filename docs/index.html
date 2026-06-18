@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soroban-Encrypt Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #121824;
+      --bg-tertiary: #1b2336;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --accent-solid: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --border-color: #2e3b56;
+      --code-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 280px;
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .logo-container {
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent-gradient);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--bg-primary);
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-list {
+      list-style: none;
+    }
+
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: block;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+      background-color: var(--bg-tertiary);
+      padding-left: 1.2rem;
+    }
+
+    .nav-link.active {
+      border-left: 3px solid var(--accent-solid);
+    }
+
+    .nav-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-solid);
+      margin: 1.5rem 0 0.5rem 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Main Content Area */
+    .content-wrapper {
+      margin-left: 280px;
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 1000px;
+    }
+
+    header {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-solid);
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-solid);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent-solid);
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+
+    ul, ol {
+      margin-bottom: 1.5rem;
+      margin-left: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Code Block styling */
+    pre {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      padding: 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #38bdf8;
+    }
+
+    pre code {
+      color: #e2e8f0;
+    }
+
+    .inline-code {
+      background-color: var(--bg-secondary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Modern Alert Boxes */
+    .alert {
+      background-color: var(--bg-secondary);
+      border-left: 4px solid var(--accent-solid);
+      padding: 1.2rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .alert p {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    /* Diagram visual styling */
+    .flow-diagram {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .flow-step {
+      display: inline-block;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .flow-arrow {
+      margin: 0.5rem auto;
+      font-size: 1.2rem;
+      color: var(--accent-solid);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .content-wrapper {
+        margin-left: 0;
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <div class="logo-icon">S</div>
+        <span class="logo-text">Soroban-Encrypt</span>
+      </div>
+      
+      <nav>
+        <span class="nav-section-title">Getting Started</span>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#overview" class="nav-link active">Overview</a></li>
+          <li class="nav-item"><a href="#how-nodes-work" class="nav-link">How Nodes Work</a></li>
+          <li class="nav-item"><a href="#usage" class="nav-link">CLI Quickstart</a></li>
+        </ul>
+
+        <span class="nav-section-title">Integration</span>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#contract-spec" class="nav-link">Smart Contracts</a></li>
+          <li class="nav-item"><a href="#api-reference" class="nav-link">API Specification</a></li>
+          <li class="nav-item"><a href="#sdk-integration" class="nav-link">SDK & Decryption</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content-wrapper">
+      <header>
+        <span class="badge">Docs v1.0.0</span>
+        <h1>Soroban-Encrypt Developer Guide</h1>
+        <p>A decentralized off-chain secrets management framework secured by Stellar's Soroban smart contracts, Shamir's Secret Sharing, and ECIES.</p>
+      </header>
+
+      <section id="overview">
+        <h2>Overview & Architecture</h2>
+        <p>Soroban-Encrypt provides decentralized off-chain data encryption with programmable on-chain access controls. Unlike standard storage solutions, decryption keys are split into multiple shares and distributed across self-hosted storage nodes. Keys are reconstructed dynamically by authenticating against a Soroban smart contract.</p>
+        
+        <div class="flow-diagram">
+          <div class="flow-step">1. Local SSS Encryption & Key Splitting</div>
+          <div class="flow-arrow">⬇ (ECIES encrypted dispatch)</div>
+          <div class="flow-step">2. Distributed Storage across N Nodes</div>
+          <div class="flow-arrow">⬇ (Client authorization challenge)</div>
+          <div class="flow-step">3. On-chain validation on Soroban RPC</div>
+          <div class="flow-arrow">⬇ (Shares reconstructed)</div>
+          <div class="flow-step">4. Successful Decryption</div>
+        </div>
+      </section>
+
+      <section id="how-nodes-work">
+        <h2>How Nodes Work</h2>
+        <p>Storage nodes act as gatekeepers to key shares. Nodes run a Go HTTP REST API backed by a secure BoltDB key-value store.</p>
+        <h3>1. Encryption & Storage Dispatch</h3>
+        <p>When encrypting files, the symmetric AES key is divided using Shamir's Secret Sharing (SSS) into $N$ shares with threshold $T$. Each share is encrypted using ECIES (Elliptic Curve Integrated Encryption Scheme) using the static P-256 public key of each destination storage node, ensuring only that specific node can read the share.</p>
+        
+        <h3>2. Soroban Authorization Verification</h3>
+        <p>To retrieve a share, a caller must submit the transaction XDR of a call to the smart contract's <code class="inline-code">approve</code> function. The node simulates the transaction envelope locally via Soroban JSON-RPC. If the contract executes successfully without panicking, authorization is granted, and the node returns the decrypted key share.</p>
+      </section>
+
+      <section id="usage">
+        <h2>CLI Quickstart</h2>
+        <p>Encrypt and distribute key shares using the CLI:</p>
+        <pre><code>./client-bin encrypt \
+  -file sensitive_data.json \
+  -out sensitive_data.enc \
+  -contract "C..." \
+  -nodes "http://node1:8080,http://node2:8080,http://node3:8080" \
+  -n 3 -t 2 \
+  -meta metadata.json</code></pre>
+      </section>
+
+      <section id="contract-spec">
+        <h2>Smart Contracts</h2>
+        <p>To integrate with Soroban-Encrypt, developers write and deploy a Soroban smart contract implementing an <code class="inline-code">approve</code> function:</p>
+        <pre><code>#[contractimpl]
+impl AllowlistContract {
+    pub fn approve(env: Env, object_id: Bytes, caller: Address) {
+        // Authenticate the caller
+        caller.require_auth();
+
+        // Enforce custom business logic (e.g. check subscription status or nft ownership)
+        let has_access = env.storage().persistent().has(&caller);
+        if !has_access {
+            panic!("Access denied: subscriber not authorized");
+        }
+    }
+}</code></pre>
+      </section>
+
+      <section id="api-reference">
+        <h2>API Specification</h2>
+        <p>Storage nodes expose simple REST endpoints for managing and retrieving key shares.</p>
+        <h3><code>POST /store</code></h3>
+        <p>Stores an encrypted key share. Protected by an optional API key.</p>
+        <pre><code>{
+  "object_id": "document_123",
+  "contract_id": "CAS3...ABCD",
+  "ephemeral_pubkey": "04a6...",
+  "ciphertext": "de78...",
+  "nonce": "a7b9..."
+}</code></pre>
+      </section>
+
+      <section id="sdk-integration">
+        <h2>SDK & Decryption</h2>
+        <p>Developers retrieve shares using the Go SDK or Client HTTP API. A decryption challenge is completed by querying $T$ of the $N$ storage nodes, fetching the decodable shares, and reconstructing the AES key to decrypt the ciphertext.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Simple active link state scrolling
+    window.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('.nav-link');
+      links.forEach(link => {
+        link.addEventListener('click', (e) => {
+          links.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
